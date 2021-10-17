@@ -93,9 +93,9 @@ router.get("/student",function(req,res){
 });
 //Lấy thông tin kỳ thi
 router.get("/:id",function(req,res){
-    var data_Exam = arrExam.find(e=>e._id===parseInt(req.params.id));
-    if (data_Exam){
-        res.json({error:0,data:data_Exam});
+    var index = arrExam.findIndex(e=>e._id===parseInt(req.params.id));
+    if (index!==-1){
+        res.json({error:0,data:data_Exam[index]});
     } else {
         res.json({error:2,data:"không có dữ liệu"});
     }
