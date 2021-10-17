@@ -11,5 +11,9 @@ var is = require("socket.io")(server);
 server.listen(3000);
 
 
+app.get("/",function(req,res){
+    res.send("Hello My Team");
+});
+
 var exam = require("./controllers/exam.controller");
 app.use("/exam",exam);
