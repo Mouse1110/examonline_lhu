@@ -100,6 +100,10 @@ router.get("/:id",function(req,res){
         res.json({error:2,data:"không có dữ liệu"});
     }
 });
+// Lấy danh sách tất cả kỳ thi mà giáo viên đã khởi tạo
+router.get("/",function(req,res){
+    res.json({error:0,data:arrExam});
+});
 //Khởi tạo kỳ thi
 router.post("/",function(req,res){
     if (req.body.name){
