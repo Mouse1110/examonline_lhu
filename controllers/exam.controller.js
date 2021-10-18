@@ -102,6 +102,10 @@ router.get("/:id",function(req,res){
 });
 // Lấy danh sách tất cả kỳ thi mà giáo viên đã khởi tạo
 router.get("/",function(req,res){
+    if(arrExam.length === 0){
+        res.json({error:2,data:"không có dữ liệu"});
+        return;
+    }
     res.json({error:0,data:arrExam});
 });
 //Khởi tạo kỳ thi
