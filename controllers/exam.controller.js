@@ -93,7 +93,7 @@ router.get("/student",function(req,res){
 });
 //Lấy thông tin kỳ thi
 router.get("/:id",function(req,res){
-    var index = arrExam.findIndex(e=>e._id===parseInt(req.params.id));
+    var index = arrExam.findIndex(e=>String(e._id)===req.params.id);
     if (index!==-1){
         res.json({error:0,data:data_Exam[index]});
     } else {
@@ -142,10 +142,7 @@ router.get("/student/:id",function(req,res){
             lStudent.push(data);
         }
     });
-    if(lStudent.length===0){
-        res.json({error:2,data:"không có dữ liệu"});
-        return;
-    }
+
     res.json({error:0,data:lStudent});
 });
 //Thêm sinh viên vào kỳ thi
@@ -164,7 +161,7 @@ router.post("/student/:id",function(req,res){
     arrMSSV.forEach(element => {
        var acc= arrAccount.find(e=>e.mssv===element);
        if (acc){
-           if (!arrExam[index].students.find(e=>e._id===acc._id)){
+           if (!arrExam[index].students.find(e=>e.idStudent===acc._id)){
             arrExam[index].students.push({idStudent:acc._id,answer:"",countRule:0});
            }
        }
