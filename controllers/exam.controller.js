@@ -136,13 +136,12 @@ router.get("/student/:id",function(req,res){
     }
     var lStudent = [];
     exam.students.forEach(element=>{
-        var acc = arrAccount.find(e=>e._id===element._id);
+        var acc = arrAccount.find(e=>e._id===element.idStudent);
         if (acc){
             var data = {_id:acc._id,name:acc.name,phone:acc.phone,email:acc.email,mssv:acc.mssv};
             lStudent.push(data);
         }
     });
-
     res.json({error:0,data:lStudent});
 });
 //Thêm sinh viên vào kỳ thi
