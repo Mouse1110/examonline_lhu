@@ -100,6 +100,8 @@ router.get("/:id",function(req,res){
         res.json({error:2,data:"không có dữ liệu"});
     }
 });
+
+
 // Lấy danh sách tất cả kỳ thi mà giáo viên đã khởi tạo
 router.get("/",function(req,res){
     if(arrExam.length === 0){
@@ -125,6 +127,27 @@ router.post("/",function(req,res){
         res.json({error:1,data:"dữ liệu truyền lên không đúng"});
     }
 });
+// Lấy danh sách sinh viên trong kỳ thi
+router.get("/student/:id",function(req,res){
+    var exam = arrExam.find(e=>String(e._id)===req.params.id);
+    if (!exam){
+        res.json({error:2,data:"không có dữ liệu"});
+        return;
+    }
+    var lStudent = [];
+    exam.students.forEach(element=>{
+        var acc = arrAccount.find(e=>e._id===element._id);
+        if (acc){
+            var data = {_id:acc._id,name:acc.name,phone:acc.phone,email:acc.email,mssv:acc.mssv};
+            lStudent.push(data);
+        }
+    });
+    if(lStudent.length===0){
+        res.json({error:2,data:"không có dữ liệu"});
+        return;
+    }
+    res.json({error:0,data:lStudent});
+});
 //Thêm sinh viên vào kỳ thi
 router.post("/student/:id",function(req,res){
     if (!req.body.mssv){
@@ -141,7 +164,9 @@ router.post("/student/:id",function(req,res){
     arrMSSV.forEach(element => {
        var acc= arrAccount.find(e=>e.mssv===element);
        if (acc){
-           arrExam[index].students.push({idStudent:acc._id,answer:"",countRule:0});
+           if (!arrExam[index].students.find(e=>e._id===acc._id)){
+            arrExam[index].students.push({idStudent:acc._id,answer:"",countRule:0});
+           }
        }
     });
     res.json({error:0,data:arrExam[index]});
