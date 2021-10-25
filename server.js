@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.use(cors());
+
+app.set('view engine','ejs');
 app.set("views","./views");
 const PORT = process.env.PORT || 5000;
 
@@ -17,7 +19,11 @@ server.listen(PORT);
 
 
 app.get("/",function(req,res){
-    res.send("Hello My Team");
+    res.render("login");
+});
+
+app.get("/home",function(req,res){
+    res.render("home");
 });
 
 var exam = require("./controllers/exam.controller");
