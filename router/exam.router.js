@@ -3,8 +3,6 @@ var express = require('express');
 var accController = require("../controllers/account.controller");
 var examController = require("../controllers/exam.controller");
 var router = express.Router();
-
-
 // Tìm sinh viên theo mã
 router.get("/student",function(req,res){
     if (!req.query.s){
@@ -30,11 +28,10 @@ router.get("/:id",function(req,res){
         res.json({error:1,data:"dữ liệu truyền lên không đúng"});
     });
 });
-
-
 // Lấy danh sách tất cả kỳ thi mà giáo viên đã khởi tạo
 router.get("/",function(req,res){
-    examController.findAll(function(data){
+    examController.findAll().then(function(data){
+        console.log(data);
         if (data===[]){
             res.json({error:2,data:"không có dữ liệu"});
         return;

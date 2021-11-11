@@ -18,7 +18,8 @@ module.exports.findID = async function(id){
    return data;
 }
 module.exports.findAll = async function(){
-    var data = await ExamModel.find();
+    var data = await ExamModel.find({});
+    console.log(data);
     return data;
 }
 
