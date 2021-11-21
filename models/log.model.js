@@ -6,4 +6,4 @@ const logSchema = new mongoose.Schema({
     method:String
 });
 
-module.exports = logSchema.model("log",logSchema);
+module.exports = mongoose.model("log",logSchema);

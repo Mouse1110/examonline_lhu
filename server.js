@@ -15,10 +15,39 @@ var server = require("http").Server(app);
 var is = require("socket.io")(server);
 server.listen(PORT);
 var acc = require("./controllers/account.controller");
+var logController = require("./controllers/log.controller");
 
 app.get("/",function(req,res){
-    acc.insert();
     res.render("login");
+});
+
+app.get("/log",function(req,res){
+    logController.getLog().then(function(data){
+        if (!data){
+            res.json({err:1,data:null});
+            return;
+        }
+        res.json({err:0,data:data});
+    });
+});
+app.get("/log/user",function(req,res){
+    logController.getCountUser().then(function(data){
+        if (!data){
+            res.json({err:1,data:null});
+            return;
+        }
+        res.json({err:0,data:data});
+    });
+});
+
+app.get("/log/exam",function(req,res){
+    logController.getCountExam().then(function(data){
+        if (!data){
+            res.json({err:1,data:null});
+            return;
+        }
+        res.json({err:0,data:data});
+    });
 });
 
 app.get("/home",function(req,res){

@@ -2,7 +2,11 @@
 var express = require('express');
 var accController = require("../controllers/account.controller");
 var examController = require("../controllers/exam.controller");
+var logController = require("../controllers/log.controller");
 var router = express.Router();
+
+
+
 // Tìm sinh viên theo mã
 router.get("/student",function(req,res){
     if (!req.query.s){
@@ -14,6 +18,7 @@ router.get("/student",function(req,res){
             res.json({error:2,data:"không có dữ liệu"});
             return;
         }
+        logController.countLog("/exam/student","GET");
         res.json({error:0,data:data_Student});
     });
     
@@ -36,6 +41,7 @@ router.get("/",function(req,res){
             res.json({error:2,data:"không có dữ liệu"});
         return;
         }
+        logController.countLog("/exam/","GET");
         res.json({error:0,data:data});
     });
 });
@@ -44,6 +50,7 @@ router.post("/",function(req,res){
     if (req.body.name){
       examController.insert(req.body.name).then(function(id){
         if (id){
+            logController.countLog("/exam/","POST");
             res.json({error:0,data:id});
             return;
         } 
@@ -60,6 +67,7 @@ router.get("/student/:id",function(req,res){
             res.json({error:2,data:"không có dữ liệu"});
             return;
         }
+        logController.countLog("/exam/student/:id","GET");
         res.json({error:0,data:data});
     });
 });
@@ -72,6 +80,7 @@ router.post("/student/:id",function(req,res){
     examController.insertStudent(req.params.id,JSON.parse(req.body.mssv)).then(function(result){
         console.log(result);
         if (result[0].modifiedCount>0){
+            logController.countLog("/exam/student/:id","POST");
             res.json({error:0,data:result[1]});
             return;
         } 
@@ -91,6 +100,7 @@ router.delete("/student/:id",function(req,res){
             res.json({error:0,data:result[1]});
             return;
         } 
+        logController.countLog("/exam/student/:id","DELETE");
         res.json({error:4,data:"lỗi không lưu được dữ liệu"});
     });
 });
@@ -103,6 +113,7 @@ router.post("/time/:id",function(req,res){
 
     examController.insertTime(req.params.id,req.body.timeStart,req.body.time).then(function(result){
         if (result[0].modifiedCount>0){
+            logController.countLog("/exam/time/:id","POST");
             res.json({error:0,data:result[1]});
             return;
         }
@@ -118,6 +129,7 @@ router.put("/time/:id",function(req,res){
 
     examController.updateTime(req.params.id,req.body.timeStart,req.body.time).then(function(result){
         if (result[0].modifiedCount>0){
+            logController.countLog("/exam/time","PUT");
             res.json({error:0,data:result[1]});
             return;
         }
@@ -132,6 +144,7 @@ router.post("/test/:id",function(req,res){
     }
     examController.insertTest(req.params.id,req.body.test).then(function(result){
         if (result[0].modifiedCount>0){
+            logController.countLog("/exam/test/:id","POST");
             res.json({error:0,data:result[1]});
             return;
         }
@@ -145,6 +158,7 @@ router.put("/test/:id",function(req,res){
     }
     examController.updateTest(req.params.id,req.body.test).then(function(result){
         if (result[0].modifiedCount>0){
+            logController.countLog("/exam/test/:id","PUT");
             res.json({error:0,data:result[1]});
             return;
         }
