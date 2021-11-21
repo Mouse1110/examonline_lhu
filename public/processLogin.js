@@ -8,7 +8,7 @@ $(document).ready(function(){
             alert("Xin Hãy Thử Lại");
             return;
         }
-        url = "http://examonlinelhu.herokuapp.com";
+        url = "http://examonlinelhu.herokuapp.com/home";
         window.location.replace(url);
     });
 
