@@ -1,6 +1,9 @@
 
 $(document).ready(function(){
-
+    var socket = io();
+    socket.on("msg",function(msg){
+        alert(msg);
+    });
     $('#btnLogin').click(function(){
         var name = $("#inputName").val();
         var pass = $("#inputPass").val();
@@ -11,5 +14,4 @@ $(document).ready(function(){
         url = "http://examonlinelhu.herokuapp.com/home";
         window.location.replace(url);
     });
-
 });

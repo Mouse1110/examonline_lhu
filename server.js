@@ -9,10 +9,14 @@ app.use(cors());
 
 app.set('view engine','ejs');
 app.set("views","./views");
+
+// setup Socket
+var server = require("http").Server(app);
+var io = require("socket.io")(server);
+
+
 const PORT = process.env.PORT || 5000;
 
-var server = require("http").Server(app);
-var is = require("socket.io")(server);
 server.listen(PORT);
 var acc = require("./controllers/account.controller");
 var logController = require("./controllers/log.controller");
@@ -56,6 +60,13 @@ app.get("/home",function(req,res){
 
 var exam = require("./router/exam.router");
 app.use("/exam",exam);
+
+// Socket
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.emit('msg',"hello user");
+  });
+
 
 // Mongoose
 const mongoose = require('mongoose');
