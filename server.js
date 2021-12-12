@@ -65,6 +65,14 @@ app.use("/exam",exam);
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.emit('msg',"hello user");
+    socket.on('joinRoom',(data)=>{
+        socket.join(data.room);
+        io.to(data.room).emit('joinRoom',data.id);
+        
+    });
+    socket.on("disconnect", () => {
+        // socket.rooms.size === 0
+      });
   });
 
 
