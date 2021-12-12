@@ -34,3 +34,22 @@ module.exports.findAllStudentOfExam = async function(id){
     var data = await SinhVienModel.find({_id:{$in:lIdStudent}});
     return data;
 }
+
+
+
+module.exports.findAllExamOfStudent = async function(id){
+    var exam = await ExamModel.find({});
+    if (!exam){
+        return [];
+    }
+    
+    var lExam = [];
+    exam.forEach(e=>{
+        var index = e.student.findIndex(element=>`${element.idStudent}` === id);
+        console.log(index);
+        if (index > -1){
+            lExam.push(e._id);
+        }
+    });
+    return lExam;
+}

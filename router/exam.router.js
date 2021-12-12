@@ -71,6 +71,18 @@ router.get("/student/:id",function(req,res){
         res.json({error:0,data:data});
     });
 });
+// NEW ======================
+// Lấy danh sách kỳ thi mà sinh viên tham gia trong kỳ thi
+router.get("/:id/student",function(req,res){
+    accController.findAllExamOfStudent(req.params.id).then(function(data){
+        if (data === []){
+            res.json({error:2,data:"không có dữ liệu"});
+            return;
+        }
+        logController.countLog("/exam/student/:id","GET");
+        res.json({error:0,data:data});
+    });
+});
 //Thêm sinh viên vào kỳ thi
 router.post("/student/:id",function(req,res){
     if (!req.body.mssv){
