@@ -12,7 +12,11 @@ app.set("views","./views");
 
 // setup Socket
 var server = require("http").Server(app);
-var io = require("socket.io")(server);
+var io = require("socket.io")(server,{
+    cors: {
+        origin: ["http://localhost:8081","http://localhost:8080"],
+      }
+});
 
 
 const PORT = process.env.PORT || 5000;
