@@ -24,6 +24,7 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT);
 var acc = require("./controllers/account.controller");
 var logController = require("./controllers/log.controller");
+var AccountController = require("./controllers/account.controller");
 
 app.get("/",function(req,res){
     res.render("login");
@@ -62,6 +63,21 @@ app.get("/home",function(req,res){
     res.render("home");
 });
 
+app.post("/login",function(req,res){
+    if (!req.body.user || !req.body.pass){
+        res.json({err:1,data:{}});
+        return;
+    }
+    AccountController.login(req.body.user,req.body.pass).then(function(data){
+        if (!data){
+            res.json({err:2,data:{}});
+            return;
+        }
+
+        res.json({err:0,data:data});
+    });
+})
+
 var exam = require("./router/exam.router");
 app.use("/exam",exam);
 
@@ -80,8 +96,10 @@ io.on('connection', (socket) => {
   });
 
 
+
 // Mongoose
 const mongoose = require('mongoose');
+const accountModel = require("./models/account.model");
 mongoose.connect('mongodb+srv://examonline:LPawViOyZu4hCs9G@cluster0.a4dtz.mongodb.net/examonline?retryWrites=true&w=majority',function(err){
     if (err){
         console.log('err: ',err);

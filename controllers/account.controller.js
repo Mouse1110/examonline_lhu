@@ -1,3 +1,4 @@
+const accountModel = require('../models/account.model');
 var SinhVienModel = require('../models/account.model');
 var ExamModel = require("../models/exam.model");
 module.exports.insert = function(){
@@ -53,3 +54,36 @@ module.exports.findAllExamOfStudent = async function(id){
     });
     return lExam;
 }
+
+
+
+module.exports.login = async function(user,pass){
+    var acc = await accountModel.findOne({$and:[{user:user},{pass:pass}]});
+    if (!acc){
+        return undefined;
+    }
+    var accGet;
+    if (acc.mssv){
+        accGet = {
+            id: acc._id,
+            name: acc.name,
+            phone:acc.phone,
+            email:acc.email,
+            mssv: acc.mssv,
+            isTeacher:false,
+         };
+    } else {
+        accGet = {
+            id: acc._id,
+            name: acc.name,
+            phone:acc.phone,
+            email:acc.email,
+            isTeacher:true,
+         };
+    }
+    
+    return accGet;
+}
+
+
+
