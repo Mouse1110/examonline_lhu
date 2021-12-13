@@ -8,7 +8,9 @@ $(document).ready(function(){
     socket.on("joinRoom",function(msg){
         alert(msg);
     });
-    
+    socket.on("eventExam",function(msg){
+        alert(msg);
+    });
     $('#btnLogin').click(function(){
         var name = $("#inputName").val();
         var pass = $("#inputPass").val();
