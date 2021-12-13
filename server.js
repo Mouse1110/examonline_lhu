@@ -114,23 +114,15 @@ io.on('connection', (socket) => {
         socket.emit('joinRoom',value);
     });
     });
-
-    socket.on('user',(data)=>{
+      socket.on("eventExam",(data)=>{
         var index= room.findIndex(e=>data.room);
-          if (index === -1){
-              room.push(data.room);
-              socket.join(data.room);
-              io.to(data.room).emit('joinRoom',data.id);
-              ExamController.findOwner(data.id,data.room).then(function(check){
-                  user.push({
-                      room:data.room,
-                      id:data.id,
-                      socket:socket.id,
-                      owner:check
-                  });
-                  console.log(user);
-              });
-          }
+        if (index === -1){
+            return;
+        }
+        index= user.findIndex(e=>e.socket === socket.id);
+        if (user[index].owner){
+            io.to(data.room).emit("eventExam",data.check);
+        }
       });
     socket.on("disconnect", () => {
       var index= user.findIndex(e=>e.socket === socket.id);
