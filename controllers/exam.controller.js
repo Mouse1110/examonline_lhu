@@ -63,3 +63,34 @@ module.exports.updateTest = async function(id,test){
     var data = await ExamModel.findById(id);
     return [log,data];
 }
+
+module.exports.online = async function(room,id,socket,check){
+    console.log(room);
+    var exam = await ExamModel.findOne({_id:room});
+    if (!exam){
+        return undefined;
+    }
+    var index = exam.student.findIndex((e)=>`${e.idStudent}` === id);
+    
+    if (index === -1){
+        return undefined;
+    }
+    
+    if (check){
+        exam.student[index] ={
+            idStudent:exam.student[index].idStudent,
+            answer:exam.student[index].answer,
+            countRule:exam.student[index].countRule,
+            online:socket
+        };
+    } else {
+        exam.student[index] ={
+            idStudent:exam.student[index].idStudent,
+            answer:exam.student[index].answer,
+            countRule:exam.student[index].countRule,
+        };
+    }
+    console.log(exam.student[index]);
+    var log = await ExamModel.updateOne({_id:room},{$set:{student:exam.student}});
+    return log;
+}

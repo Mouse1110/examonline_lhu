@@ -25,6 +25,7 @@ server.listen(PORT);
 var acc = require("./controllers/account.controller");
 var logController = require("./controllers/log.controller");
 var AccountController = require("./controllers/account.controller");
+var ExamController = require("./controllers/exam.controller");
 
 app.get("/",function(req,res){
     res.render("login");
@@ -88,10 +89,13 @@ io.on('connection', (socket) => {
     socket.on('joinRoom',(data)=>{
         socket.join(data.room);
         io.to(data.room).emit('joinRoom',data.id);
-        
+        ExamController.online(data.room,data.id,socket.id,true);
     });
+    socket.on("end",(data)=>{
+        ExamController.online(data.room,data.id,socket.id,false);
+    })
     socket.on("disconnect", () => {
-        // socket.rooms.size === 0
+     
       });
   });
 
