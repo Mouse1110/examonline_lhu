@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
     socket.emit('msg',"hello user");
 
     socket.on('joinRoom',(data)=>{
-      var index= room.findIndex(e=>data.room);
+      var index= room.findIndex(e=>data.room === e.room);
         if (index === -1){
             room.push({room:data.room,start:false});
         }
@@ -112,14 +112,14 @@ io.on('connection', (socket) => {
             return;
         }
         socket.emit('joinRoom',value);
-        var index= room.findIndex(e=>data.room);
+        var index= room.findIndex(e=>data.room === e.room);
         if (index !== -1){
             socket.emit("eventExam",room[index].start);
         }
     });
     });
       socket.on("eventExam",(data)=>{
-        var index= room.findIndex(e=>data.room);
+        var index= room.findIndex(e=>data.room === e.room);
         if (index === -1){
             return;
         }
