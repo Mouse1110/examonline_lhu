@@ -71,10 +71,12 @@ app.get("/home",function(req,res){
 app.post("/login",function(req,res){
     if (!req.body.user || !req.body.pass){
         res.json({err:1,data:{}});
+
         return;
     }
     AccountController.login(req.body.user,req.body.pass).then(function(data){
         if (!data){
+            logController.countLog("/login","POST");
             res.json({err:2,data:{}});
             return;
         }

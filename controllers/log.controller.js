@@ -5,14 +5,15 @@ const AccModel = require("../models/account.model");
 const ExamModel = require("../models/exam.model");
 
 module.exports.countLog = async function(name,method){
-    var data= await LogModel.findOne({name:name});
+    var data= await LogModel.findOne({api:name});
     if (!data){
         var logNew = new LogModel({
             api:name,
-            count:0,
+            count:1,
             method:method,
         });
         await logNew.save();
+       
         return;
     } 
     
