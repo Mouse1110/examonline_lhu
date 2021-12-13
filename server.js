@@ -96,7 +96,7 @@ io.on('connection', (socket) => {
     socket.on('joinRoom',(data)=>{
       var index= room.findIndex(e=>data.room);
         if (index === -1){
-            room.push(data.room);
+            room.push({room:data.room,start:false});
         }
         socket.join(data.room);
             
@@ -112,6 +112,10 @@ io.on('connection', (socket) => {
             return;
         }
         socket.emit('joinRoom',value);
+        var index= room.findIndex(e=>data.room);
+        if (index !== -1){
+            socket.emit("eventExam",room[index].start);
+        }
     });
     });
       socket.on("eventExam",(data)=>{
@@ -119,8 +123,9 @@ io.on('connection', (socket) => {
         if (index === -1){
             return;
         }
-        index= user.findIndex(e=>e.socket === socket.id);
-        if (user[index].owner){
+        var iUser= user.findIndex(e=>e.socket === socket.id);
+        if (user[iUser].owner){
+            room[index] = {room:room[index].room,start:data.check},
             io.to(data.room).emit("eventExam",data.check);
         }
       });
