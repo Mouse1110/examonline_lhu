@@ -79,7 +79,7 @@ router.get("/:id/student",function(req,res){
             res.json({error:2,data:"không có dữ liệu"});
             return;
         }
-        logController.countLog("/exam/student/:id","GET");
+        logController.countLog("/exam/:id/student","GET");
         res.json({error:0,data:data});
     });
 });
