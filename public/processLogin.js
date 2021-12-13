@@ -3,7 +3,8 @@ $(document).ready(function(){
     var socket = io();
     socket.on("msg",function(msg){
         alert(msg);
-        socket.emit("joinRoom",{id:'617a5bff5abc58779a9c27dd',room:'617a893aeb3825743169fd89'})
+        socket.emit("joinRoom",{id:'617a5bff5abc58779a9c27dd',room:'617a893aeb3825743169fd89',isTeacher:true})
+        socket.emit("eventExam",{room:'617a893aeb3825743169fd89',check:true});
     });
     socket.on("joinRoom",function(msg){
         alert(msg);
