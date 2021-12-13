@@ -3,6 +3,7 @@ const ExamModel = require("../models/exam.model");
 const StudentModel = require("../models/account.model");
 
 const StudentInExamOTD = require("../models/OTD/studentInExam.otd");
+const accountModel = require("../models/account.model");
 
 module.exports.insert = async function(name){
     newExam = new ExamModel({
@@ -64,33 +65,13 @@ module.exports.updateTest = async function(id,test){
     return [log,data];
 }
 
-module.exports.online = async function(room,id,socket,check){
-    console.log(room);
-    var exam = await ExamModel.findOne({_id:room});
+module.exports.getTest = async function(room){
+    var exam = await ExamModel.findById(room);
     if (!exam){
         return undefined;
     }
-    var index = exam.student.findIndex((e)=>`${e.idStudent}` === id);
-    
-    if (index === -1){
+    if (!exam.test){
         return undefined;
     }
-    
-    if (check){
-        exam.student[index] ={
-            idStudent:exam.student[index].idStudent,
-            answer:exam.student[index].answer,
-            countRule:exam.student[index].countRule,
-            online:socket
-        };
-    } else {
-        exam.student[index] ={
-            idStudent:exam.student[index].idStudent,
-            answer:exam.student[index].answer,
-            countRule:exam.student[index].countRule,
-        };
-    }
-    console.log(exam.student[index]);
-    var log = await ExamModel.updateOne({_id:room},{$set:{student:exam.student}});
-    return log;
+    return exam.test;
 }

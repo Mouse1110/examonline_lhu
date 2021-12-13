@@ -3,7 +3,7 @@ $(document).ready(function(){
     var socket = io();
     socket.on("msg",function(msg){
         alert(msg);
-        socket.emit("joinRoom",{id:'617a5a4e5abc58779a9c27d7',room:'617a893aeb3825743169fd89'})
+        socket.emit("joinRoom",{id:'617a5bff5abc58779a9c27dd',room:'617a893aeb3825743169fd89'})
     });
     socket.on("joinRoom",function(msg){
         alert(msg);

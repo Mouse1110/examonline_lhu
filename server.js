@@ -19,6 +19,10 @@ var io = require("socket.io")(server,{
 });
 
 
+var room = [];
+
+var user = [];
+
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT);
@@ -86,16 +90,52 @@ app.use("/exam",exam);
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.emit('msg',"hello user");
+
     socket.on('joinRoom',(data)=>{
-        socket.join(data.room);
-        io.to(data.room).emit('joinRoom',data.id);
-        ExamController.online(data.room,data.id,socket.id,true);
+      var index= room.findIndex(e=>data.room);
+        if (index === -1){
+            room.push(data.room);
+            socket.join(data.room);
+            
+            user.push({
+                room:data.room,
+                id:data.id,
+                socket:socket.id,
+                owner:data.isTeacher
+            });
+            console.log(user);
+        ExamController.getTest(data.room).then(function(value){
+            if (!value){
+                return;
+            }
+            socket.emit('joinRoom',value);
+        });
+        }
     });
-    socket.on("end",(data)=>{
-        ExamController.online(data.room,data.id,socket.id,false);
-    })
+
+    socket.on('user',(data)=>{
+        var index= room.findIndex(e=>data.room);
+          if (index === -1){
+              room.push(data.room);
+              socket.join(data.room);
+              io.to(data.room).emit('joinRoom',data.id);
+              ExamController.findOwner(data.id,data.room).then(function(check){
+                  user.push({
+                      room:data.room,
+                      id:data.id,
+                      socket:socket.id,
+                      owner:check
+                  });
+                  console.log(user);
+              });
+          }
+      });
     socket.on("disconnect", () => {
-     
+      var index= user.findIndex(e=>e.socket === socket.id);
+      if (index>-1){
+          user.splice(index,1);
+      }
+      console.log(user);
       });
   });
 
