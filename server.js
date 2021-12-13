@@ -95,22 +95,22 @@ io.on('connection', (socket) => {
       var index= room.findIndex(e=>data.room);
         if (index === -1){
             room.push(data.room);
-            socket.join(data.room);
-            
-            user.push({
-                room:data.room,
-                id:data.id,
-                socket:socket.id,
-                owner:data.isTeacher
-            });
-            console.log(user);
-        ExamController.getTest(data.room).then(function(value){
-            if (!value){
-                return;
-            }
-            socket.emit('joinRoom',value);
-        });
         }
+        socket.join(data.room);
+            
+        user.push({
+            room:data.room,
+            id:data.id,
+            socket:socket.id,
+            owner:data.isTeacher
+        });
+        console.log(user);
+    ExamController.getTest(data.room).then(function(value){
+        if (!value){
+            return;
+        }
+        socket.emit('joinRoom',value);
+    });
     });
 
     socket.on('user',(data)=>{
